@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #FEF9D9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #8EACCD;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-left: 50px; 
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar a:hover {
+            color: #D2E0FB;
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #8EACCD; 
+            margin-bottom: 20px;
+        }
+
+        .content {
+            padding-top: 80px;
+        }
+
+        .order-confirmation {
+            max-width: 600px;
+            margin: auto;
+            background: #DEE5D4; 
+            margin-bottom: 20px;
+        }
+        .order-confirmation p {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+        .order-confirmation .order-details {
+            text-align: left;
+            margin: 20px 0;
+            padding: 10px;
+            background: #F0F4F8; 
+            border-radius: 5px;
+        }
+        .order-confirmation .order-details p {
+            margin: 5px 0;
+        }
+        .order-confirmation button {
+            background: #8EACCD; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .order-confirmation button:hover {
+            background: #789DBC; 
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Rasagya Publications</h1>
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/about}">About Us</a>
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/signup}">Signup</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Order Confirmation</h1>
+        <div class="order-confirmation">
+            <h2>Thank you for your order!</h2>
+            <div class="order-details">
+                <p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+                <p><strong>Address:</strong> <span th:text="${order.address}"></span></p>
+                <p><strong>Phone Number:</strong> <span th:text="${order.phoneNumber}"></span></p>
+                <p><strong>Books:</strong></p>
+                <ul>
+                    <li th:each="book : ${order.books}">
+                        <span th:text="${book.key}"></span> - Quantity: <span th:text="${book.value}"></span>
+                    </li>
+                </ul>
+            </div>
+            <button onclick="window.location.href='/'">Continue Shopping</button>
+        </div>
+    </div>
+</body>
+</html>

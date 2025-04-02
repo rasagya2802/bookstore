@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #FEF9D9; 
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #8EACCD; 
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-left: 50px; 
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar a:hover {
+            color: #D2E0FB; 
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #8EACCD; 
+            margin-bottom: 20px;
+        }
+
+        .content {
+            padding-top: 80px; 
+        }
+
+
+        .cart-container {
+            max-width: 900px;
+            margin: auto;
+            background: #DEE5D4; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table thead th {
+            background: #8EACCD; 
+            color: white;
+            padding: 10px;
+            border-bottom: 2px solid #D2E0FB;
+            text-align: left;
+        }
+        table tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #D2E0FB;
+            text-align: left;
+        }
+        table tbody td:last-child {
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        button {
+            background: #8EACCD; 
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        button:hover {
+            background: #789DBC;
+        }
+
+        .empty-cart {
+            color: #8EACCD;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #8EACCD; 
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .continue-shopping:hover {
+            background: #789DBC;
+        }
+
+        .checkout-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #8EACCD;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .checkout-button:hover {
+            background: #789DBC;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Rasagya Publications</h1>
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/about}">About Us</a>
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/signup}">Signup</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Your Shopping Cart</h1>
+        <div th:if="${cart.bookQuantities.isEmpty()}">
+            <p class="empty-cart">Your cart is empty!</p>
+        </div>
+        <div th:if="${!cart.bookQuantities.isEmpty()}">
+            <div class="cart-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Quantity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.title}"></td>
+                            <td>
+                                <form th:action="@{/cart/update/{id}(id=${book.id})}" method="post" onsubmit="return validateQuantity(this);">
+                                    <input type="number" name="quantity" th:value="${cart.bookQuantities[book.id]}" min="1" />
+                                    <button type="submit">Update</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/cart/remove/{id}(id=${book.id})}" method="post">
+                                    <button type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a th:href="@{/cart/checkout}" class="checkout-button">Checkout</a>
+        </div>
+        <a href="/books" class="continue-shopping">Continue Shopping</a>
+    </div>
+    <script>
+        function validateQuantity(form) {
+            const quantityInput = form.querySelector('input[name="quantity"]');
+            const quantity = parseInt(quantityInput.value);
+            if (quantity < 1) {
+                alert("Quantity must be at least 1.");
+                return false;
+            }
+            form.querySelector('button[type="submit"]').disabled = true;
+            return true;
+        }
+    </script>
+</body>
+</html>

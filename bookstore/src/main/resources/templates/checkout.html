@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #FEF9D9; 
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #8EACCD; 
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-left: 50px; 
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar a:hover {
+            color: #D2E0FB; 
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #8EACCD; 
+            margin-bottom: 20px;
+        }
+
+        .content {
+            padding-top: 80px; 
+        }
+
+        .checkout-form {
+            max-width: 500px;
+            margin: auto;
+            background: #DEE5D4; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .checkout-form input[type="text"], .checkout-form input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .checkout-form button {
+            background: #8EACCD; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .checkout-form button:hover {
+            background: #789DBC; 
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Rasagya Publications</h1>
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/about}">About Us</a>
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/signup}">Signup</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Checkout</h1>
+        <div class="checkout-form">
+            <form th:action="@{/cart/placeOrder}" method="post">
+                <input type="text" name="address" placeholder="Enter your address" required />
+                <input type="tel" name="phoneNumber" placeholder="Enter your phone number" required />
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

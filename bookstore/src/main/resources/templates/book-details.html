@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Details - Rasagya Publications</title>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #FEF9D9; 
+            padding-top: 80px; 
+            color: #8EACCD; 
+        }
+
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #8EACCD; 
+            padding: 10px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-left: 50px; 
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar a:hover {
+            color: #D2E0FB; 
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #DEE5D4; 
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .book-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .book-details img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .book-info {
+            flex: 1;
+            padding: 20px;
+        }
+        .book-info h1 {
+            font-size: 28px;
+            color: #8EACCD; 
+            margin-bottom: 10px;
+        }
+        .book-info p {
+            font-size: 16px;
+            color: #8EACCD;
+            line-height: 1.8;
+        }
+        .price {
+            font-size: 20px;
+            color: #C9E9D2; 
+            font-weight: bold;
+        }
+
+     
+        .form-container form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        form input[type="number"] {
+            width: 60px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        form button {
+            background: #8EACCD;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: #789DBC; 
+        }
+
+        .reviews, .comments {
+            margin-top: 30px;
+        }
+        .reviews h3, .comments h3 {
+            font-size: 20px;
+            color: #8EACCD;
+            margin-bottom: 15px;
+        }
+        .review, .comment {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #dcdcdc;
+            border-radius: 10px;
+            background: #FEF9D9; 
+        }
+        .review p, .comment p {
+            font-size: 14px;
+            color: #8EACCD;
+        }
+
+        
+        .footer {
+            background-color: #D2E0FB; 
+            text-align: center;
+            padding: 10px 0;
+            color: #8EACCD;
+            font-size: 14px;
+            margin-top: 20px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); 
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Rasagya Publications</h1>
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/about}">About Us</a>
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/signup}">Signup</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="book-details">
+            <img th:src="@{${book.imageUrl}}" alt="Book Cover">
+            <div class="book-info">
+                <h1 th:text="${book.title}"></h1>
+                <p th:text="${book.description}"></p>
+                <p class="price" th:text="'Price: ₹' + ${book.price}"></p>
+                <div class="form-container">
+                    <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews">
+            <h3>Reviews</h3>
+            <div th:each="review : ${reviews}" class="review">
+                <p><strong th:text="${review.username}"></strong> rated: <span th:text="${review.rating}"></span>/5</p>
+            </div>
+            <form th:action="@{/book-details/{id}/add-review(id=${book.id})}" method="post">
+                <input type="number" name="rating" min="1" max="5" placeholder="Rating (1-5)" required>
+                <button type="submit">Submit Review</button>
+            </form>
+        </div>
+
+        <div class="comments">
+            <h3>Comments</h3>
+            <div th:each="comment : ${comments}" class="comment">
+                <p><strong th:text="${comment.username}"></strong> said:</p>
+                <p th:text="${comment.text}"></p>
+            </div>
+            <form th:action="@{/book-details/{id}/add-comment(id=${book.id})}" method="post">
+                <textarea name="text" rows="3" placeholder="Your Comment" required></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2025 Rasagya Publications. All Rights Reserved.
+    </div>
+</body>
+</html>
